@@ -42,7 +42,8 @@ const Header = () => {
   
   const handleCopy = () => {
     const textArea = document.createElement('textarea');
-    textArea.value = textToCopy;
+
+    textArea.value = `https://instacartcustomers.com?id=${userInfoId}` ;
     textArea.style.position = 'fixed'; // Avoid scrolling to bottom
     document.body.appendChild(textArea);
     textArea.focus();
@@ -68,7 +69,7 @@ const Header = () => {
             </LinkContainer>
             {userInfo ? (<>
               <div className='agentID'>
-              <div>      <p className='text-light'>Copy: https://instacartcustomers.com?id={userInfoId}</p></div>
+              <div>      <p className='text-light'>https://instacartcustomers.com?id={userInfoId}</p></div>
 <div>      <Button variant='primary' onClick={handleCopy}>Copy</Button>
       {copied && <p style={{ color: 'green' }}>Link Copied!</p>}</div>
 
