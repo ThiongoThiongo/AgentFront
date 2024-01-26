@@ -66,13 +66,14 @@ const Header = () => {
             <LinkContainer to='/'>
               <Navbar.Brand>PeoplesLion</Navbar.Brand>
             </LinkContainer>
-           
-            <div className='agentID'>
+            {userInfo ? (<>
+              <div className='agentID'>
               <div>      <p className='text-light'>Copy: https://instacartcustomers.com?id={userInfoId}</p></div>
 <div>      <Button variant='primary' onClick={handleCopy}>Copy</Button>
       {copied && <p style={{ color: 'green' }}>Link Copied!</p>}</div>
 
-    </div>
+    </div></>):(<></>)}
+      
              <Navbar.Toggle aria-controls='basic-navbar-nav' />
              <Navbar.Collapse id='basic-navbar-nav'>
              <Nav className="ms-auto">
