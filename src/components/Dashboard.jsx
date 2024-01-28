@@ -51,7 +51,7 @@ const InstacartAccounts = (props) => {
   const [deleteId, setDeleteId] = useState('')
   var instasAccountArray = [...instacart];
   var instacartArrayLength = instasAccountArray.length;
-      var rows = [
+    var rows = [
     ];
 
    if(parsedDat.start !=='' && parsedDat.end !=='')
@@ -129,7 +129,7 @@ const InstacartAccounts = (props) => {
       </Modal>
         </div>
 
-        {instasAccountArray.length !== 0 || timer ? (<>     <div className="agentTable">
+        {rows.length !== 0 || timer ? (<>     <div className="agentTable">
       <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
