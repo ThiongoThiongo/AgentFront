@@ -51,10 +51,11 @@ const InstacartAccounts = (props) => {
   const [deleteId, setDeleteId] = useState('')
   var instasAccountArray = [...instacart];
   var instacartArrayLength = instasAccountArray.length;
+  var rows = [
+  ];
+
    if(parsedDat.start !=='' && parsedDat.end !=='')
    {
-    var rows = [
-    ];
     var starts = parseInt(parsedDat.start) -1, ends =parseInt(parsedDat.end)-1  ;
     instasAccountArray.forEach((agent, index)=> {
 
@@ -69,9 +70,8 @@ const InstacartAccounts = (props) => {
 
   const checkedButton= async ( checked)=> {
     try {
-        const response = await axios.post('https://instacartbackend.onrender.com/api/instacart/update', {checked, id:deleteId});
+        const response = await axios.post('http://localhost:/api/instacart/update', {checked, id:deleteId});
         
-        console.log(checked, deleteId)
          if(response.data.message)
          {
             toast.success('Successfully Updated');

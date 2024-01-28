@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Loader from './Loader';
-import { useState } from 'react';
 const Header = () => {
   const {userInfo} = useSelector((state)=> state.auth)
   const [textToCopy, setTextToCopy] = useState('This text will be copied!');
