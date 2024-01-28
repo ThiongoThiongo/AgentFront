@@ -9,6 +9,8 @@ import {Logout} from '../slices/authSlice'
 import { useNavigate } from 'react-router-dom';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import Loader from './Loader';
+import { useState } from 'react';
 const Header = () => {
   const {userInfo} = useSelector((state)=> state.auth)
   const [textToCopy, setTextToCopy] = useState('This text will be copied!');
@@ -16,6 +18,8 @@ const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [logout ] = useLogoutMutation()
+  const [logoutDone, setLogoutDone] = useState(true)
+
   var userInfoId;
   if(userInfo)
   {
@@ -23,9 +27,11 @@ const Header = () => {
   }
    const logoutHandler = async () => {
     try {
+      setLogoutDone(false)
+
     await logout().unwrap();
       dispatch(Logout());
-      navigate('/')
+      setLogoutDone(true)
     } catch(err)
     {
       console.log(err)
@@ -61,7 +67,7 @@ const Header = () => {
   };
 
   return (
-    <header>
+    <>  {logoutDone ?  <header>
           <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect >
            <Container className='px-5 mx-2 py-3'>
             <LinkContainer to='/'>
@@ -113,7 +119,9 @@ const Header = () => {
         </Navbar.Collapse>
            </Container>
           </Navbar>
-    </header>
+    </header>:<Loader/>}
+</>
+
   )
 }
 
