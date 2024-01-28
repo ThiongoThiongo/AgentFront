@@ -22,7 +22,7 @@ if(instas.length)
   useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await fetch('https://instacartbackend.onrender.com/api/instacart/',{credentials:'include'} );
+          const response = await fetch('https://instacartbackend.onrender.com/api/instacart/');
           var fetchedData = await response.json();
            setInstacartAccounts(fetchedData);
       
