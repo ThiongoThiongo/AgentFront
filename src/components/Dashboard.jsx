@@ -51,7 +51,6 @@ const InstacartAccounts = (props) => {
   const [deleteId, setDeleteId] = useState('')
   var instasAccountArray = [...instacart];
   var instacartArrayLength = instasAccountArray.length;
-  console.log(instacartArrayLength)
    if(parsedDat.start !=='' && parsedDat.end !=='')
    {
     var rows = [

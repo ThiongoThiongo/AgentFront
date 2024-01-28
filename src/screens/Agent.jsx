@@ -8,12 +8,15 @@ const Agent = () => {
 
 const calledChecked = (id, state) => {
   var instas = [...instacartAcounts];
-
+if(instas.length)
+{
   instas.map((insta)=> {
     if(insta._id === id){
       return insta.checked = state
     }
   })
+}
+
   setInstacartAccounts(instas)
 }
   useEffect(() => {
