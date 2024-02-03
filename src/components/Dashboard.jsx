@@ -18,8 +18,18 @@ import Modal from '@mui/material/Modal';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loader from '../components/Loader';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ListIcon from '@mui/icons-material/List';
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  useWindowSize,
 
+} from '@react-hook/window-size'
 
+import Credits from './Credits';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import '../css/Agents.css'
 const style = {
     position: 'absolute',
     top: '50%',
@@ -75,7 +85,6 @@ const InstacartAccounts = (props) => {
          if(response.data.message)
          {
             toast.success('Successfully Updated');
-           props.called(deleteId, checked)
 
          }
          else{
@@ -93,7 +102,27 @@ const InstacartAccounts = (props) => {
     setTimer(true)
  }, 3000)
 
+ const [view, setView] = useState('accounts');
+ const [showMenu, setShowMenu] = useState(true)
+ const toggleShowButton = ()=> {
+  setShowMenu(!showMenu)
+}
+const [width] = useWindowSize()
 
+const getClassName = ()=> {
+
+  if(width > 750)
+  {
+    return 'left'
+  }
+  else if(width < 750 && showMenu)
+  {
+    return 'hide'
+  }
+  else{
+    return 'side'
+  }
+}
 
       
     const [showRemark, setShowRemark] = useState(false)
@@ -102,8 +131,141 @@ const InstacartAccounts = (props) => {
     }
     const [selectedRemark, setSelectedRemark]
  = useState('')
+ const handleChange = (event, nextView) => {
+  setView(nextView);
+};
+const [loading, setLoading] = useState(false)
+const [credits, setCredits] = useState([])
+
+useEffect(() => {
+  setLoading(true)
+  const fetchData = async () => {
+    try {
+      setLoading(false)
+
+      const response = await fetch('https://instacartbackend.onrender.com/api/agentRoute/forAgents',{ method:'GET', headers: {}
+    },  {credentials:'include'} );
+    
+      var fetchedData = await response.json();
+       
+         console.log(fetchedData)
+       setCredits(fetchedData);
+
+    } catch (error) {
+      setLoading(false)
+      console.log(error);
+    }
+  };
+
+  fetchData();
+}, []); 
+ 
    return (
+
     <div className='centerAgent'>
+      <div className={getClassName()}>
+   <ToggleButtonGroup
+      orientation="vertical"
+      value={view}
+      exclusive
+      onChange={handleChange}
+    >
+      <ToggleButton value="credits" onClick={toggleShowButton} aria-label="credits" className='my-2'>
+        <SupervisedUserCircleIcon/> <span className='mx-2'>Credits</span> 
+      </ToggleButton>
+      <ToggleButton onClick={toggleShowButton}  value="accounts" aria-label="accounts">
+        <SupervisorAccountIcon/>   <span className='mx-2'>Accounts Instacart</span> 
+      </ToggleButton>
+      
+    </ToggleButtonGroup>
+    
+    </div>
+    {   width <  750 ? <>     {showMenu ? 
+           
+           <div className="icons"><Button
+              type='button'
+              variant='primary'
+              className='p-2'
+              onClick={()=>setShowMenu(!showMenu)}
+            >
+              <ListIcon/>
+            </Button>
+            </div>
+            :   <div className="iconsDelete"> <Button
+            type='button'
+            variant='danger'
+            className='p-2'
+            onClick={()=>setShowMenu(!showMenu)}
+          >
+<CloseIcon/>           </Button>
+</div>
+}</>:<></>}
+
+{!loading ? <><div className="right">
+
+    {(() => {
+        switch(view) {
+          case 'accounts':
+            return  <>{rows.length !== 0 || timer ? (<>     <div className="agentTable">
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align='left'>Id</TableCell>
+                  <TableCell align="right">Name</TableCell>
+                  <TableCell align="right">Email</TableCell>
+                  <TableCell align="right">Phone</TableCell>
+                  <TableCell align="right">Credit</TableCell>
+                  <TableCell align="right">Remark</TableCell>
+                  <TableCell align="right">Called or Not</TableCell>
+                  <TableCell align="right">Agent Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.Id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell align="left">{row.Id}</TableCell>
+                    <TableCell align="right">{row.Name}</TableCell>
+                    <TableCell align="right"> {row.Email} </TableCell>
+                    <TableCell align="right">  {row.Phone}</TableCell>
+                    <TableCell align="right">  {row.CreditNumber}</TableCell>
+                   
+                    
+                    <TableCell align="right"><Button  variant='primary' className='mt-3' onClick={()=> {
+                      setShowRemark(true)
+                      setSelectedRemark(row.Remark)
+                    }}> Read</Button></TableCell>
+               {row.Checked ?(        
+                 <TableCell align="right"><CheckBoxIcon/> </TableCell>):(         <TableCell align="right"> <HighlightOffIcon/> </TableCell>)} 
+      
+                    {row.Checked ? (         <TableCell align="right"><Button  variant='danger'  className='mt-3' onClick={()=>{
+                           checkedButton(false)
+                           setDeleteId(row.Id)
+                    }} >  Uncheck </Button> </TableCell>):(         <TableCell align="right"><Button  variant='success'  className='mt-3' onClick={()=>{
+                      checkedButton( true)
+                      setDeleteId(row.Id)
+               }} >Check</Button> </TableCell>)}   
+         
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+            </div></>): (<>
+            <Loader/>
+              </>)}
+              </>
+          case 'credits':
+            return <Credits credits = {credits} />
+           default:
+            return null
+        }
+      })()}
+</div></> :<Loader/> }
+
 
         <div className="modal">
      
@@ -129,57 +291,7 @@ const InstacartAccounts = (props) => {
       </Modal>
         </div>
 
-        {rows.length !== 0 || timer ? (<>     <div className="agentTable">
-      <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align='left'>Id</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Phone</TableCell>
-            <TableCell align="right">Credit</TableCell>
-            <TableCell align="right">Remark</TableCell>
-            <TableCell align="right">Called or Not</TableCell>
-            <TableCell align="right">Agent Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.Id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell align="left">{row.Id}</TableCell>
-              <TableCell align="right">{row.Name}</TableCell>
-              <TableCell align="right"> {row.Email} </TableCell>
-              <TableCell align="right">  {row.Phone}</TableCell>
-              <TableCell align="right">  {row.CreditNumber}</TableCell>
-             
-              
-              <TableCell align="right"><Button  variant='primary' className='mt-3' onClick={()=> {
-                setShowRemark(true)
-                setSelectedRemark(row.Remark)
-              }}> Read</Button></TableCell>
-         {row.Checked ?(        
-           <TableCell align="right"><CheckBoxIcon/> </TableCell>):(         <TableCell align="right"> <HighlightOffIcon/> </TableCell>)} 
 
-              {row.Checked ? (         <TableCell align="right"><Button  variant='danger'  className='mt-3' onClick={()=>{
-                     checkedButton(false)
-                     setDeleteId(row.Id)
-              }} >  Uncheck </Button> </TableCell>):(         <TableCell align="right"><Button  variant='success'  className='mt-3' onClick={()=>{
-                checkedButton( true)
-                setDeleteId(row.Id)
-         }} >Check</Button> </TableCell>)}   
-   
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-      </div></>): (<>
-      <Loader/>
-        </>)}
    
       
     </div>
