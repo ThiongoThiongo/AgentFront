@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server:{
     
-      port:3004,
+      port:3005,
       proxy:{
         '/api': {
           target:'https://instacartbackend.onrender.com',
