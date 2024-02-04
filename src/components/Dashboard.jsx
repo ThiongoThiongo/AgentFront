@@ -172,7 +172,7 @@ useEffect(() => {
       setLoading(false)
 
       const response = await fetch('https://instacartbackend.onrender.com/api/agentRoute/loginwithout',{ method:'GET', headers: {}
-    },  {credentials:'include'} );
+    });
     
       var fetchedData = await response.json();
        
