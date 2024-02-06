@@ -5,7 +5,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
+import moment from 'moment';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -18,9 +18,9 @@ const style = {
   p: 4,
 };
 function createData(
- cvc, Id
+ Id, cvc, createdAt
 ) {
-  return { cvc, Id};
+  return { Id , cvc, createdAt};
 }
 const Credits = (props) => {
   const { credits }= props;
@@ -29,10 +29,14 @@ const Credits = (props) => {
   ];
   var clientsArray = [...credits]
   clientsArray.forEach((client)=> {
-      rows.push(createData(  client.cvc,  client._id ))
+      rows.push(createData(    client._id, client.cvc, client.createdAt ))
     
 
 })
+const  formatDate = (date) => {
+  return moment(date).format('DD/MM/YYYY');
+}
+
   return (
     <div >
          <TableContainer component={Paper}>
@@ -40,7 +44,8 @@ const Credits = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell align="right">Cvc</TableCell>
-             
+                  <TableCell align="right">CreatedAt</TableCell>
+
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -50,7 +55,7 @@ const Credits = (props) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell align="right">{row.cvc}</TableCell>
-           
+                    <TableCell align="right">  {  formatDate(row.createdAt) }</TableCell>
          
                   </TableRow>
                 ))}
