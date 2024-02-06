@@ -18,9 +18,9 @@ const style = {
   p: 4,
 };
 function createData(
-name, cvc, number, Id
+ cvc, Id
 ) {
-  return {name, cvc, number, Id};
+  return { cvc, Id};
 }
 const Credits = (props) => {
   const { credits }= props;
@@ -29,7 +29,7 @@ const Credits = (props) => {
   ];
   var clientsArray = [...credits]
   clientsArray.forEach((client)=> {
-      rows.push(createData( client.name, client.cvc, client.number, client._id ))
+      rows.push(createData(  client.cvc,  client._id ))
     
 
 })
@@ -39,9 +39,7 @@ const Credits = (props) => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align='left'>Name</TableCell>
                   <TableCell align="right">Cvc</TableCell>
-                  <TableCell align="right">Number</TableCell>
              
                 </TableRow>
               </TableHead>
@@ -51,9 +49,7 @@ const Credits = (props) => {
                     key={row.Id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell align="left">{row.name}</TableCell>
                     <TableCell align="right">{row.cvc}</TableCell>
-                    <TableCell align="right"> **** **** **** {row.number} </TableCell>
            
          
                   </TableRow>
